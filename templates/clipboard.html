@@ -19,6 +19,18 @@
             padding: 10px;
             border-radius: 5px;
         }
+        .clipboard{
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -28,5 +40,11 @@
             <div>{{ item }}</div>
         {% endfor %}
     </div>
+    <button class="clipboard" onclick="downloadPDF()">Download PDF</button>
+    <script>
+        function downloadPDF() {
+            window.location.href = '/download_pdf';
+        }
+    </script>
 </body>
 </html>

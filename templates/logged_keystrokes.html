@@ -26,6 +26,19 @@
         .special-key {
             color: red;  /* Style special keys with red color */
         }
+
+        .download-btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -36,6 +49,7 @@
             {% endfor %}
         </ul>
     </div>
+   
     <script>
         // Function to fetch and update keystrokes
         function updateKeystrokes() {
@@ -54,6 +68,17 @@
 
         // Initial update on page load
         updateKeystrokes();
+
+        var downloadBtn = document.createElement('button');
+        downloadBtn.className = 'download-btn';
+        downloadBtn.textContent = 'Download PDF';
+        downloadBtn.onclick = function() {
+            // Send a request to download the PDF
+            window.location.href = '/download_logs_as_pdf';
+        };
+
+        // Append button to body
+        document.body.appendChild(downloadBtn);
     </script>
 </body>
 </html>

