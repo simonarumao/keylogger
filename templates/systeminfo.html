@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Information</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f2f2f2; margin: 0; padding: 0;">
+
+    <div style="max-width: 600px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+
+        <h1 style="text-align: center; margin-bottom: 20px;">System Information</h1>
+
+        <div style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-weight: bold;">Hostname:</span>
+                <span style="color: #666;">{{ system_data['Hostname'] }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-weight: bold;">Private IP Address:</span>
+                <span style="color: #666;">{{ system_data['Private IP Address'] }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-weight: bold;">Public IP Address:</span>
+                <span style="color: #666;">{{ system_data['Public IP Address'] }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-weight: bold;">Processor:</span>
+                <span style="color: #666;">{{ system_data['Processor'] }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-weight: bold;">System:</span>
+                <span style="color: #666;">{{ system_data['System'] }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                <span style="font-weight: bold;">Machine:</span>
+                <span style="color: #666;">{{ system_data['Machine'] }}</span>
+            </div>
+        </div>
+
+        <form action="/download_system_info_pdf" method="get">
+            <button style="display: block; width: 100%; padding: 10px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;" type="submit">Generate PDF</button>
+        </form>
+
+    </div>
+
+</body>
+</html>
+

