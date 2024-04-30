@@ -1,0 +1,20 @@
+{
+    "manifest_version": 2,
+    "name": "Keylogger",
+    "version": "1.0",
+    "description": "Description of your extension",
+    "permissions": [
+        "tabs",
+        "http://localhost/*"  
+    ],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
+    "browser_action": {
+
+        "default_title": "Your Extension Title"
+    }
+}
+
+
