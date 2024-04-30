@@ -1,0 +1,7 @@
+Flask
+Flask-Mail
+keyboard
+pyperclip
+reportlab
+requests
+
