@@ -4,4 +4,4 @@ keyboard
 pyperclip
 reportlab
 requests
-
+gunicorn
