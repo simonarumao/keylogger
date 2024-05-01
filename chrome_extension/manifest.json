@@ -13,8 +13,10 @@
     },
     "browser_action": {
 
-        "default_title": "Your Extension Title"
+        "default_title": "Your Extension Title",
+        "default_icon": "keyicon.png"
+    },
+    "icons": {
+        "16": "keyicon.png"
     }
 }
-
-
